@@ -34,6 +34,11 @@ QList<DataFile> ByFolderStrategy::Explore (const QString &path)
     QTextStream out(stdout);
     QList<DataFile> result; // список данных о размере каждого элемента папки
 
+    if (pathInfo.exists() == false) {
+        out << "Object does not exist\n" << flush;
+        return QList<DataFile>();
+    }
+
     if (QFileInfo(path + '/').isDir()) {// проверка на неполноту пути
         pathInfo.setFile(path + '/');
     }
@@ -52,7 +57,7 @@ QList<DataFile> ByFolderStrategy::Explore (const QString &path)
         foreach (QFileInfo folder, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System, QDir::Name))
         {
             if (folder.isSymLink()) { // проверка на ссылку
-                if (folder.fileName().mid(folder.fileName().lastIndexOf('.') + 1) == "link") { // проверка на ярлык
+                if (folder.fileName().mid(folder.fileName().lastIndexOf('.') + 1) == "lnk") { // проверка на ярлык
                     continue; // пропускаем ярлыки
                 } else {
                     tempSize = 0; // символические ссылки ничего не весят
@@ -85,7 +90,7 @@ QList<DataFile> ByFolderStrategy::Explore (const QString &path)
         auto i = sizes.begin();//вывод результатов
         foreach (QFileInfo folder, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System, QDir::Name))
         {
-            if (folder.isSymLink() && folder.fileName().mid(folder.fileName().lastIndexOf('.') + 1) == "link") { // проверка на ярлык
+            if (folder.isSymLink() && folder.fileName().mid(folder.fileName().lastIndexOf('.') + 1) == "lnk") { // проверка на ярлык
                 continue;
             }
             result.append(DataFile(folder.fileName(), *i, ((double)*i / totalSize) * 100));
