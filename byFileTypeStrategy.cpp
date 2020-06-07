@@ -107,14 +107,12 @@ QList<DataFile> ByFileTypeStrategy::Explore (const QString &path)
         }
     } else { // обработка файла, не являющегося папокй
         quint64 fileSize = pathInfo.size();
-        #if defined(Q_OS_WIN)
         if (pathInfo.isSymLink()) { // проверка на ярлык
             QFile fileOpen(pathInfo.absoluteFilePath());
             fileOpen.open(QIODevice::ReadOnly);
             fileSize = fileOpen.size();
             fileOpen.close();
         }
-        #endif
         result.append(DataFile(FileType(pathInfo), fileSize, 100));
     }
     return result;
