@@ -10,7 +10,6 @@ QString ByFileTypeStrategy::FileType(const QFileInfo &file) {
         if (file.fileName().mid(file.fileName().lastIndexOf('.') + 1) == "lnk") {
             return ".link";
         }
-        return "symlink";
     }
     if (file.isDir()) {
         return "directory";
@@ -103,7 +102,6 @@ QList<DataFile> ByFileTypeStrategy::Explore (const QString &path)
             return QList<DataFile>();
         }
         types.sort(); // сортировка типов по их названиям
-        //сохранение результатов
         for (int i = 0; i < types.size(); i++) {
             result.append(DataFile(types[i], hash[types[i]], ((double)hash[types[i]] / totalSize) * 100));
         }
