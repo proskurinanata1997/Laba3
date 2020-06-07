@@ -44,7 +44,7 @@ QList<DataFile> ByFolderStrategy::Explore (const QString &path)
     }
 
     if (pathInfo.isDir() && !pathInfo.isSymLink()) {// проверка на то, что на входе была подана папка
-        if (pathInfo.dir().isEmpty()) {// проверка папки на пустоту
+        if (pathInfo.dir().isEmpty()) {
             out << "Folder is empty\n" << flush;
             return QList<DataFile>();
         }
@@ -60,7 +60,7 @@ QList<DataFile> ByFolderStrategy::Explore (const QString &path)
                 if (folder.fileName().mid(folder.fileName().lastIndexOf('.') + 1) == "lnk") { // проверка на ярлык
                     continue; // пропускаем ярлыки
                 } else {
-                    tempSize = 0; // символические ссылки ничего не весят
+                    tempSize = 0;
                 }
             } else {
                 tempSize = FolderSize(folder.path() + '/' + folder.fileName()); // вычисляется размер папки
@@ -102,7 +102,7 @@ QList<DataFile> ByFolderStrategy::Explore (const QString &path)
             i++;
         }
     } else { // обработка файла, не являющегося папкой
-        quint64 fileSize = pathInfo.size(); // вычисляется размер файла
+        quint64 fileSize = pathInfo.size();
         if (pathInfo.isSymLink()) { // проверка на ярлык
             QFile fileOpen(pathInfo.absoluteFilePath());
             fileOpen.open(QIODevice::ReadOnly);
