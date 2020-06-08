@@ -73,7 +73,6 @@ QList<DataFile> ByFileTypeStrategy::Explore (const QString &path)
         }
         if (totalSize == 0) { // если папка ничего не весит, то выходим из функции
             out << "Folder has size 0.\n" << flush;
-            return QList<DataFile>();
         }
         types.sort(); // сортировка типов по их названиям
         for (int i = 0; i < types.size(); i++) {

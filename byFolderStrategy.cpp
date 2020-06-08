@@ -84,7 +84,6 @@ QList<DataFile> ByFolderStrategy::Explore (const QString &path)
 
         if (totalSize == 0) {// если папка ничего не весит, то выходим из функции
             out << "Folder has size 0\n" << flush;
-            return QList<DataFile>();
         }
 
         auto i = sizes.begin();//вывод результатов
