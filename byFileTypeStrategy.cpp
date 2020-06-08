@@ -5,29 +5,29 @@
 #include <QDir>
 #include <QTextStream>
 
-QString ByFileTypeStrategy::FileType(const QFileInfo &file) {
-    if (file.isSymLink()) {
-        if (file.fileName().mid(file.fileName().lastIndexOf('.') + 1) == "lnk") {
-            return ".link";
-        }
-    }
-    if (file.isDir()) {
-        return "directory";
-    }
-    QString fileName = file.fileName();
-    int i = fileName.lastIndexOf('.'); // поиск символа
-    if (i == -1) { // неизвестный тип (отсутствует символ)
-        return "unknown";
-    }
-    return fileName.mid(i); // возвращение типа файла
-}
+//QString ByFileTypeStrategy::FileType(const QFileInfo &file) {
+//    if (file.isSymLink()) {
+//        if (file.fileName().mid(file.fileName().lastIndexOf('.') + 1) == "lnk") {
+//            return ".link";
+//        }
+//    }
+//    if (file.isDir()) {
+//        return "directory";
+//    }
+//    QString fileName = file.fileName();
+//    int i = fileName.lastIndexOf('.'); // поиск символа
+//    if (i == -1) { // неизвестный тип (отсутствует символ)
+//        return "unknown";
+//    }
+//    return fileName.mid(i); // возвращение типа файла
+//}
 
 void ByFileTypeStrategy::FolderSize(const QString &path, QHash<QString, quint64> &hash) {
     QDir dir(path);
-    quint64 temp = QFileInfo(path + "/.").size();
-    if (temp) {
-        hash[FileType(QFileInfo(path + "/."))] += temp;
-    }
+//    quint64 temp = QFileInfo(path + "/.").size();
+//    if (temp) {
+//        hash[FileType(QFileInfo(path + "/."))] += temp;
+//    }
     foreach (QFileInfo folder, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System | QDir::NoSymLinks))
     {
         FolderSize(folder.path() + '/' + folder.fileName(), hash); // проводятся вычисления с вложенной папкой
@@ -68,10 +68,10 @@ QList<DataFile> ByFileTypeStrategy::Explore (const QString &path)
 
         QDir dir(pathInfo.absoluteFilePath());
         QHash<QString, quint64> hash;
-        quint64 temp = QFileInfo(pathInfo.absoluteFilePath() + '.').size();
-        if (temp) {
-            hash[FileType(QFileInfo(pathInfo.absoluteFilePath() + '.'))] = temp;
-        }
+//        quint64 temp = QFileInfo(pathInfo.absoluteFilePath() + '.').size();
+//        if (temp) {
+//            hash[FileType(QFileInfo(pathInfo.absoluteFilePath() + '.'))] = temp;
+//        }
 
         //вычисление размеров объектов
         foreach (QFileInfo folder, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System | QDir::NoSymLinks))
