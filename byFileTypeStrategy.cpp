@@ -37,11 +37,11 @@ void ByFileTypeStrategy::FolderSize(const QString &path, QHash<QString, quint64>
         if (file.isSymLink()) { // проверка на ярлык
             QFile fileOpen(file.absoluteFilePath());
             fileOpen.open(QIODevice::ReadOnly);
-            hash[FileType(file)] += fileOpen.size();
+            hash[file.suffix()] += fileOpen.size();
             fileOpen.close();
             continue;
         }
-        hash[FileType(file)] += file.size();
+        hash[file.suffix()] += file.size();
     }
 }
 
@@ -83,11 +83,11 @@ QList<DataFile> ByFileTypeStrategy::Explore (const QString &path)
             if (file.isSymLink()) { // проверка на ярлык
                 QFile fileOpen(file.absoluteFilePath());
                 fileOpen.open(QIODevice::ReadOnly);
-                hash[FileType(file)] += fileOpen.size();
+                hash[file.suffix()] += fileOpen.size();
                 fileOpen.close();
                 continue;
             }
-            hash[FileType(file)] += file.size();
+            hash[file.suffix()] += file.size();
         }
 
         QStringList types; // массив типов
@@ -113,7 +113,7 @@ QList<DataFile> ByFileTypeStrategy::Explore (const QString &path)
             fileSize = fileOpen.size();
             fileOpen.close();
         }
-        result.append(DataFile(FileType(pathInfo), fileSize, 100));
+        result.append(DataFile(pathInfo.suffix(), fileSize, 100));
     }
     return result;
 }
