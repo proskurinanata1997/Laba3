@@ -23,14 +23,14 @@ public:
          * Тест 8: несуществующий объект
          */
 
-        QString path = QString::fromUtf8("../Lab3/Tests/Test0");
+        QString path = QString::fromUtf8("../Laba3/Tests/Test0");
         for (int i = 1; i < 9; i++) {
             switch (i) {
                 case 7: {
                     path.append(".txt");
                 }
                 default: {
-                    path[18] = QChar('0' + i);
+                    path[19] = QChar('0' + i);
                 }
             }
             out << path << "\n\n" << flush;
