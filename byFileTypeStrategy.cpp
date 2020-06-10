@@ -1,19 +1,21 @@
 #include "byFileTypeStrategy.h"
-#include <QFile>
+#include <QTextStream>
 #include <QFileInfo>
 #include <QString>
+#include <QFile>
 #include <QDir>
-#include <QTextStream>
 
 void ByFileTypeStrategy::FolderSize(const QString &path, QHash<QString, quint64> &hash) {
     QDir dir(path);
+
     foreach (QFileInfo folder, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System | QDir::NoSymLinks))
     {
-        FolderSize(folder.path() + '/' + folder.fileName(), hash); // проводятся вычисления с вложенной папкой
+        FolderSize(folder.path() + '/' + folder.fileName(), hash);
     }
+
     foreach (QFileInfo file, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System))
     {
-        if (file.isSymLink()) { // проверка на ярлык
+        if (file.isSymLink()) {
             QFile fileOpen(file.absoluteFilePath());
             fileOpen.open(QIODevice::ReadOnly);
             hash[file.suffix()] += fileOpen.size();
@@ -24,14 +26,13 @@ void ByFileTypeStrategy::FolderSize(const QString &path, QHash<QString, quint64>
     }
 }
 
-QList<DataFile> ByFileTypeStrategy::Explore (const QString &path)
-{
+QList<DataFile> ByFileTypeStrategy::Explore(const QString &path) {
     QFileInfo pathInfo(path);
     QTextStream out(stdout);
     QList<DataFile> result; // список данных о размере, занимаемом каждым типом в папке
 
-    if (pathInfo.exists() == false) {
-        out << "Object does not exist\n" << flush;
+    if (pathInfo.exists() == false) {// проверка объекта на существование
+        out << "Object does not exist.\n" << flush;
         return QList<DataFile>();
     }
 
@@ -39,7 +40,7 @@ QList<DataFile> ByFileTypeStrategy::Explore (const QString &path)
         pathInfo.setFile(path + '/');
     }
 
-    if (pathInfo.isDir() && !pathInfo.isSymLink()) { // проверка на то, что на входе была подана папка
+    if (pathInfo.isDir() && !pathInfo.isSymLink()) {// проверка на то, что на входе была подана папка
         if (pathInfo.dir().isEmpty()) {
             out << "Folder is empty.\n" << flush;
             return QList<DataFile>();
@@ -47,7 +48,7 @@ QList<DataFile> ByFileTypeStrategy::Explore (const QString &path)
 
         QDir dir(pathInfo.absoluteFilePath());
         QHash<QString, quint64> hash;
-        //вычисление размеров объектов
+
         foreach (QFileInfo folder, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System | QDir::NoSymLinks))
         {
             FolderSize(folder.path() + '/' + folder.fileName(), hash); // проводятся вычисления с папкой
@@ -67,20 +68,31 @@ QList<DataFile> ByFileTypeStrategy::Explore (const QString &path)
         QStringList types; // массив типов
         quint64 totalSize = 0; // итоговый размер папки
 
-        for (auto i = hash.begin(); i != hash.end(); i++) {// вычисление итогового размера папки и заполнение массива типов
-            totalSize += *i;
-            types.append(i.key());
+        for (auto iterator = hash.begin(); iterator != hash.end(); iterator++) { // вычисление итогового размера папки и заполнение массива типов
+            totalSize += *iterator;
+            types.append(iterator.key());
         }
-        if (totalSize == 0) { // если папка ничего не весит, то выходим из функции
-            out << "Folder has size 0.\n" << flush;
-        }
+
+
         types.sort(); // сортировка типов по их названиям
+
         for (int i = 0; i < types.size(); i++) {
-            result.append(DataFile(types[i], hash[types[i]], ((double)hash[types[i]] / totalSize) * 100));
+            if (totalSize!= 0) {
+                if (!types[i].isEmpty()){
+                    result.append(DataFile(types[i], hash[types[i]], ((double)hash[types[i]] / totalSize) * 100));
+                }
+                else{
+                    result.append(DataFile("Without extension", hash[types[i]], ((double)hash[types[i]] / totalSize) * 100));
+                }
+            }
+            else {
+                  result.append(DataFile("Folder has size 0", hash[types[i]], ((double)hash[types[i]] / totalSize) * 100));
+
+            }
         }
     } else { // обработка файла, не являющегося папокй
         quint64 fileSize = pathInfo.size();
-        if (pathInfo.isSymLink()) { // проверка на ярлык
+        if (pathInfo.isSymLink()) {
             QFile fileOpen(pathInfo.absoluteFilePath());
             fileOpen.open(QIODevice::ReadOnly);
             fileSize = fileOpen.size();
