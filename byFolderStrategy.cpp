@@ -1,21 +1,21 @@
-#include <byFolderStrategy.h>
-#include <QDir>
-#include <QFile>
+#include "byFolderStrategy.h"
+#include <QTextStream>
 #include <QFileInfo>
 #include <QString>
-#include <QTextStream>
+#include <QFile>
+#include <QDir>
 
 quint64 ByFolderStrategy::FolderSize(const QString &path) {
-    QDir directory(path); // текущая директория
+    QDir dir(path); // текущая директория
     quint64 size = QFileInfo(path + "/.").size();
-    foreach (QFileInfo folder, directory.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System | QDir::NoSymLinks))
-    {
-        size += FolderSize(folder.path() + '/' + folder.fileName()); // вычисляется размер папки
-    }
 
-    foreach (QFileInfo file, directory.entryInfoList(QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System))
+    foreach (QFileInfo folder, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System | QDir::NoSymLinks))
     {
-        if (file.isSymLink()) { // проверка на ярлык
+        size += FolderSize(folder.path() + '/' + folder.fileName());
+    }
+    foreach (QFileInfo file, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System))
+    {
+        if (file.isSymLink()) {
             QFile fileOpen(file.absoluteFilePath());
             fileOpen.open(QIODevice::ReadOnly);
             size += fileOpen.size();
@@ -28,52 +28,48 @@ quint64 ByFolderStrategy::FolderSize(const QString &path) {
     return size;
 }
 
-QList<DataFile> ByFolderStrategy::Explore (const QString &path)
-{
+QList<DataFile> ByFolderStrategy::Explore(const QString &path) {
     QFileInfo pathInfo(path);
     QTextStream out(stdout);
     QList<DataFile> result; // список данных о размере каждого элемента папки
 
-    if (pathInfo.exists() == false) {
-        out << "Object does not exist\n" << flush;
+    if (pathInfo.exists() == false) { // проверка объекта на существование
+        out << "Object does not exist.\n" << flush;
         return QList<DataFile>();
     }
 
-    if (QFileInfo(path + '/').isDir()) {// проверка на неполноту пути
+    if (QFileInfo(path + '/').isDir()) { // проверка на неполноту пути
         pathInfo.setFile(path + '/');
     }
 
-    if (pathInfo.isDir() && !pathInfo.isSymLink()) {// проверка на то, что на входе была подана папка
+    if (pathInfo.isDir() && !pathInfo.isSymLink()) { // проверка на то, что на входе была подана папка
         if (pathInfo.dir().isEmpty()) {
-            out << "Folder is empty\n" << flush;
+            out << "Folder is empty.\n" << flush;
             return QList<DataFile>();
         }
 
         QDir dir(pathInfo.absoluteFilePath());
-        quint64 totalSize = QFileInfo(pathInfo.absoluteFilePath() + '.').size(), tempSize; // 1 - итоговый размер папки (начальное значение задаётся такое, чтобы вычислить реальный размер папки), 2 - временная переменная
-        QList<quint64> sizes; // массив размера объектов
+        quint64 totalSize = QFileInfo(pathInfo.absoluteFilePath() + '.').size(), tempSize;
+        QList<quint64> sizes; // массив размеров объектов
 
-        //вычисление размеров объектов, цикл по всем папкам в текущей папке
         foreach (QFileInfo folder, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System, QDir::Name))
         {
             if (folder.isSymLink()) { // проверка на ссылку
                 if (folder.fileName().mid(folder.fileName().lastIndexOf('.') + 1) == "lnk") { // проверка на ярлык
                     continue; // пропускаем ярлыки
-                } else {
-                    tempSize = 0;
                 }
             } else {
-                tempSize = FolderSize(folder.path() + '/' + folder.fileName()); // вычисляется размер папки
+                tempSize = FolderSize(folder.path() + '/' + folder.fileName());
             }
             sizes.append(tempSize);
             totalSize += tempSize;
         }
-        //цикл по всем файлам в папке
         foreach (QFileInfo file, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System, QDir::Name))
         {
-            if (file.isSymLink()) { // проверка на ярлык
+            if (file.isSymLink()) {
                 QFile fileOpen(file.absoluteFilePath());
                 fileOpen.open(QIODevice::ReadOnly);
+                tempSize = fileOpen.size();
                 fileOpen.close();
             } else {
                 tempSize = file.size();
@@ -81,28 +77,28 @@ QList<DataFile> ByFolderStrategy::Explore (const QString &path)
             sizes.append(tempSize);
             totalSize += tempSize;
         }
-
-        if (totalSize == 0) {// если папка ничего не весит, то выходим из функции
-            out << "Folder has size 0\n" << flush;
+        // если папка ничего не весит, то выходим из функции
+        if (totalSize == 0) {
+            out << "The folder has size 0.\n" << flush;
         }
 
-        auto i = sizes.begin();//вывод результатов
+        auto iterator = sizes.begin();
         foreach (QFileInfo folder, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System, QDir::Name))
         {
             if (folder.isSymLink() && folder.fileName().mid(folder.fileName().lastIndexOf('.') + 1) == "lnk") { // проверка на ярлык
                 continue;
             }
-            result.append(DataFile(folder.fileName(), *i, ((double)*i / totalSize) * 100));
-            i++;
+            result.append(DataFile(folder.fileName(), *iterator, ((double)*iterator / totalSize) * 100));
+            iterator++;
         }
         foreach (QFileInfo file, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System, QDir::Name))
         {
-            result.append(DataFile(file.fileName(), *i, ((double)*i / totalSize) * 100));
-            i++;
+            result.append(DataFile(file.fileName(), *iterator, ((double)*iterator / totalSize) * 100));
+            iterator++;
         }
     } else { // обработка файла, не являющегося папкой
         quint64 fileSize = pathInfo.size();
-        if (pathInfo.isSymLink()) { // проверка на ярлык
+        if (pathInfo.isSymLink()) {
             QFile fileOpen(pathInfo.absoluteFilePath());
             fileOpen.open(QIODevice::ReadOnly);
             fileSize = fileOpen.size();
@@ -112,3 +108,4 @@ QList<DataFile> ByFolderStrategy::Explore (const QString &path)
     }
     return result;
 }
+
