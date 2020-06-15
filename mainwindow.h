@@ -1,13 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 #include <QAbstractItemView>
+#include <QAbstractItemModel>
 #include <QFileSystemModel>
 #include <QItemSelection>
 #include <QMainWindow>
 #include "fileBrowserDataModel.h"
 #include "byFileTypeStrategy.h"
 #include "byFolderStrategy.h"
-#include "table.h"
+#include "data.h"
 
 namespace Ui {
 class MainWindow;
@@ -31,10 +32,10 @@ private:
     Ui::MainWindow *ui;
     QFileSystemModel *dirModel; // модель файловой системы
     AbstractStrategy *groupingStrategy; // указатель на стратегию
-    QList<DataFile> data; // данные о размерах элементов папки
-    Table *table; // указатель на способ отображения
+    FileBrowserDataModel *fileModel;
+    QAbstractItemView *table; // указатель на способ отображения
     QString path; // путь к нужной папке
-    void infoShow(); // функция, организующая отображение данных в окне
+    void infoShow(bool); // функция, организующая отображение данных в окне
 };
 
 #endif // MAINWINDOW_H
