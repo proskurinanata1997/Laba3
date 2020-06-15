@@ -34,18 +34,18 @@
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="viewType">
+    <property name="title">
+     <string>Отображение</string>
+    </property>
+    <addaction name="table"/>
+   </widget>
    <widget class="QMenu" name="strategyChoose">
     <property name="title">
      <string>Группировка</string>
     </property>
     <addaction name="folder"/>
     <addaction name="fileType"/>
-   </widget>
-   <widget class="QMenu" name="viewType">
-    <property name="title">
-     <string>Отображение</string>
-    </property>
-    <addaction name="table"/>
    </widget>
    <addaction name="strategyChoose"/>
    <addaction name="viewType"/>
