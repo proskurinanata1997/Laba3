@@ -14,7 +14,7 @@ public:
     int columnCount(const QModelIndex &parent) const override; //возвращает количество столбцов
     QVariant data(const QModelIndex &index, int role) const override; //возвращает элемент модели
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override; // возвращает заголовок элементов модели
-
+    void setNewData(QList<DataFile> dataFile);
 private:
     enum NameColumn { // индексация столбцов модели
         NAME,
