@@ -34,7 +34,9 @@ QVariant FileBrowserDataModel::headerData(int section, Qt::Orientation orientati
 
 void FileBrowserDataModel::setNewData(QList<DataFile> dataFile)
 {
+    beginResetModel();
     dataModel = dataFile;
+    endResetModel();
 }
 
 QVariant FileBrowserDataModel::data(const QModelIndex &index, int role) const { //возвращает элемент модели
