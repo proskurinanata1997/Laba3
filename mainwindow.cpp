@@ -3,9 +3,6 @@
 #include <QItemSelectionModel>
 #include <QTableView>
 #include <QTreeView>
-#include "byFileTypeStrategy.h"
-#include "byFolderStrategy.h"
-#include "fileBrowserDataModel.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -17,24 +14,22 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     dirModel->setRootPath(path);
     ui->folderTreeView->setModel(dirModel);
     ui->folderTreeView->expandAll();
-    QTableView* view = new QTableView;
-    table = view;
-    fileModel = new FileBrowserDataModel();
-    view->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    table->setModel(fileModel);//Заносим модель в дерево
-    ui->splitter->addWidget(table);
+    bridge = new TableBridge(this);
+    ui->splitter->addWidget(bridge->UpdateData(data));
     // соединение сигнала выбора директории со слотом отображения информации
     connect(ui->folderTreeView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(on_selectionChangedSlot(const QItemSelection &, const QItemSelection &)));
 }
 
-void MainWindow::infoShow(bool refreshData = true) {
-    QList<DataFile> data;
-    if (refreshData) {
+void MainWindow::infoShow(bool changeData, AbstractBridge *br = nullptr) {
+    if (changeData) {
         data = groupingStrategy->Explore(path);
-        fileModel->setNewData(data);
-
+        bridge->UpdateData(data);
     } else {
-        fileModel->setNewData(data);
+        QList<int> width = ui->splitter->sizes();
+        delete bridge;
+        bridge = br;
+        ui->splitter->addWidget(bridge->UpdateData(data));
+        ui->splitter->setSizes(width);
     }
 }
 
@@ -47,14 +42,14 @@ void MainWindow::on_selectionChangedSlot(const QItemSelection &selected, const Q
         filePath = dirModel->filePath(ix);
     }
     path = filePath; // сохранение пути
-    infoShow();
+    infoShow(true);
 }
 
 MainWindow::~MainWindow() {
     delete ui;
     delete dirModel;
     delete groupingStrategy;
-    delete table;
+    delete bridge;
 }
 
 void MainWindow::on_folder_triggered() {
@@ -70,5 +65,13 @@ void MainWindow::on_fileType_triggered() {
 }
 
 void MainWindow::on_table_triggered() {
-    infoShow(false);
+    infoShow(false, new TableBridge(this));
+}
+
+void MainWindow::on_barChart_triggered() {
+    infoShow(false, new BarBridge(this));
+}
+
+void MainWindow::on_pieChart_triggered() {
+    infoShow(false, new PieBridge(this));
 }

@@ -9,7 +9,9 @@
 #include "byFileTypeStrategy.h"
 #include "byFolderStrategy.h"
 #include "data.h"
-
+#include "tableBridge.h"
+#include "barBridge.h"
+#include "pieBridge.h"
 namespace Ui {
 class MainWindow;
 }
@@ -23,6 +25,8 @@ private slots:
     void on_folder_triggered();
     void on_fileType_triggered();
     void on_table_triggered();
+    void on_barChart_triggered();
+    void on_pieChart_triggered();
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
@@ -32,10 +36,10 @@ private:
     Ui::MainWindow *ui;
     QFileSystemModel *dirModel; // модель файловой системы
     AbstractStrategy *groupingStrategy; // указатель на стратегию
-    FileBrowserDataModel *fileModel;
-    QAbstractItemView *table; // указатель на способ отображения
+    AbstractBridge *bridge;
+    QList<DataFile> data;
     QString path; // путь к нужной папке
-    void infoShow(bool); // функция, организующая отображение данных в окне
+    void infoShow(bool, AbstractBridge*);
 };
 
 #endif // MAINWINDOW_H
