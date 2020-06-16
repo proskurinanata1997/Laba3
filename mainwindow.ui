@@ -39,6 +39,8 @@
      <string>Отображение</string>
     </property>
     <addaction name="table"/>
+    <addaction name="barChart"/>
+    <addaction name="pieChart"/>
    </widget>
    <widget class="QMenu" name="strategyChoose">
     <property name="title">
@@ -66,7 +68,21 @@
     <string>Таблица</string>
    </property>
   </action>
+  <action name="barChart">
+   <property name="text">
+    <string>Столбчатая диаграмма</string>
+   </property>
+  </action>
+  <action name="pieChart">
+   <property name="text">
+    <string>Круговая диаграмма</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
+ <slots>
+  <slot>on_table_triggered()</slot>
+  <slot>slot1()</slot>
+ </slots>
 </ui>
