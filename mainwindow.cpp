@@ -14,22 +14,17 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     dirModel->setRootPath(path);
     ui->folderTreeView->setModel(dirModel);
     ui->folderTreeView->expandAll();
-    bridge = new TableBridge(this);
-    ui->splitter->addWidget(bridge->UpdateData(data));
+    ui->splitter->addWidget(observer.UpdateData(data, 2));
     // соединение сигнала выбора директории со слотом отображения информации
     connect(ui->folderTreeView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(on_selectionChangedSlot(const QItemSelection &, const QItemSelection &)));
 }
 
-void MainWindow::infoShow(bool changeData, AbstractBridge *br = nullptr) {
+void MainWindow::infoShow(bool changeData, int index = 0) {
     if (changeData) {
         data = groupingStrategy->Explore(path);
-        bridge->UpdateData(data);
+        observer.UpdateData(data, index);
     } else {
-        QList<int> width = ui->splitter->sizes();
-        delete bridge;
-        bridge = br;
-        ui->splitter->addWidget(bridge->UpdateData(data));
-        ui->splitter->setSizes(width);
+        ui->splitter->replaceWidget(1, observer.UpdateData(data, index));
     }
 }
 
@@ -49,7 +44,6 @@ MainWindow::~MainWindow() {
     delete ui;
     delete dirModel;
     delete groupingStrategy;
-    delete bridge;
 }
 
 void MainWindow::on_folder_triggered() {
@@ -65,13 +59,13 @@ void MainWindow::on_fileType_triggered() {
 }
 
 void MainWindow::on_table_triggered() {
-    infoShow(false, new TableBridge(this));
+    infoShow(false, 2);
 }
 
 void MainWindow::on_barChart_triggered() {
-    infoShow(false, new BarBridge(this));
+    infoShow(false, 0);
 }
 
 void MainWindow::on_pieChart_triggered() {
-    infoShow(false, new PieBridge(this));
+    infoShow(false, 1);
 }

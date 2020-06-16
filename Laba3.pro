@@ -22,6 +22,7 @@ SOURCES += \
     fileBrowserDataModel.cpp \
     main.cpp \
     mainwindow.cpp \
+    observer.cpp \
     pieBridge.cpp \
     tableBridge.cpp
 
@@ -34,6 +35,7 @@ HEADERS += \
     data.h \
     fileBrowserDataModel.h \
     mainwindow.h \
+    observer.h \
     pieBridge.h \
     tableBridge.h
 

@@ -12,6 +12,7 @@
 #include "tableBridge.h"
 #include "barBridge.h"
 #include "pieBridge.h"
+#include "observer.h"
 namespace Ui {
 class MainWindow;
 }
@@ -36,10 +37,10 @@ private:
     Ui::MainWindow *ui;
     QFileSystemModel *dirModel; // модель файловой системы
     AbstractStrategy *groupingStrategy; // указатель на стратегию
-    AbstractBridge *bridge;
     QList<DataFile> data;
+    Observer observer;
     QString path; // путь к нужной папке
-    void infoShow(bool, AbstractBridge*);
+    void infoShow(bool, int);
 };
 
 #endif // MAINWINDOW_H
