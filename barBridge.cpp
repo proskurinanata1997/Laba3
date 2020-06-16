@@ -16,7 +16,6 @@ BarBridge::~BarBridge() {
 
 QWidget* BarBridge::UpdateData(const QList<DataFile> &data) {
     model->removeAllSeries();
-    //DataFile others(0, 0, 0.0);
     QtCharts::QBarSeries *series = new QtCharts::QBarSeries(); // серия элементов диаграммы
     for (auto i = data.begin(); i != data.end(); i++) {
         QtCharts::QBarSet *set = new QtCharts::QBarSet(i->name + " (" + QString::number(i->percentage, 'f', 2) + "%)");
