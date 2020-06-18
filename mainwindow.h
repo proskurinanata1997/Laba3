@@ -41,6 +41,7 @@ private:
     Observer observer;
     QString path; // путь к нужной папке
     void infoShow(bool, int);
+    int indexModel;
 };
 
 #endif // MAINWINDOW_H

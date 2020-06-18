@@ -17,7 +17,6 @@ QWidget* Observer::UpdateData(QList<DataFile>& data, int index)
         {
             result = massivBridge[i]->UpdateData(data);
         }
-    else massivBridge[i]->UpdateData(data);
     }
     return result;
 }

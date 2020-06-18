@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     dirModel->setRootPath(path);
     ui->folderTreeView->setModel(dirModel);
     ui->folderTreeView->expandAll();
-    ui->splitter->addWidget(observer.UpdateData(data, 2));
+    ui->splitter->addWidget(observer.UpdateData(data, indexModel = 2));
     // соединение сигнала выбора директории со слотом отображения информации
     connect(ui->folderTreeView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(on_selectionChangedSlot(const QItemSelection &, const QItemSelection &)));
 }
@@ -22,8 +22,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 void MainWindow::infoShow(bool changeData, int index = 0) {
     if (changeData) {
         data = groupingStrategy->Explore(path);
-        observer.UpdateData(data, index);
+        observer.UpdateData(data, indexModel);
     } else {
+        indexModel = index;
         ui->splitter->replaceWidget(1, observer.UpdateData(data, index));
     }
 }
