@@ -3,6 +3,7 @@
 #include <QItemSelectionModel>
 #include <QTableView>
 #include <QTreeView>
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -14,7 +15,10 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     dirModel->setRootPath(path);
     ui->folderTreeView->setModel(dirModel);
     ui->folderTreeView->expandAll();
-    ui->splitter->addWidget(observer.UpdateData(data, indexModel = 2));
+    pr = observer.UpdateData(data, indexModel = 2);
+    if (pr != nullptr)
+        ui->splitter->addWidget(pr);
+
     // соединение сигнала выбора директории со слотом отображения информации
     connect(ui->folderTreeView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), this, SLOT(on_selectionChangedSlot(const QItemSelection &, const QItemSelection &)));
 }

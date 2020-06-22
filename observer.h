@@ -11,7 +11,7 @@ class Observer
 {
 public:
     Observer();
-    QWidget*  UpdateData(QList<DataFile>&, int);
+    QWidget*  UpdateData(QList<DataFile>&, unsigned int);
     ~Observer();
 
 private:

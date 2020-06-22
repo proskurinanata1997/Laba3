@@ -8,23 +8,18 @@ Observer::Observer()
     massivBridge[2] = new TableBridge();
 }
 
-QWidget* Observer::UpdateData(QList<DataFile>& data, int index)
+QWidget* Observer::UpdateData(QList<DataFile>& data, unsigned int index)
 {
-    QWidget *result;
-    for (int i = 0; i < massivBridge.size(); i++)
-    {
-        if (i==index)
-        {
-            result = massivBridge[i]->UpdateData(data);
-        }
-    }
-    return result;
+    if (index < (unsigned int) massivBridge.size())
+        return massivBridge[index]->UpdateData(data);
+    else
+        return nullptr;
 }
 
 Observer::~Observer()
 {
     for (int i = 0; i < massivBridge.size(); i++)
     {
-        delete massivBridge[i];
+        delete massivBridge[i];}
+
     }
-}

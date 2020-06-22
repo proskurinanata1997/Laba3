@@ -22,7 +22,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 private slots:
-    void on_selectionChangedSlot(const QItemSelection &selected, const QItemSelection &deselected);
+    void on_selectionChangedSlot(const QItemSelection &selected, const QItemSelection &deselected); // слот, активирующийся при выборе директории
     void on_folder_triggered();
     void on_fileType_triggered();
     void on_table_triggered();
@@ -42,6 +42,7 @@ private:
     QString path; // путь к нужной папке
     void infoShow(bool, int);
     int indexModel;
+    QWidget* pr;
 };
 
 #endif // MAINWINDOW_H
