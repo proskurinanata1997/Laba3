@@ -9,9 +9,6 @@
 #include "byFileTypeStrategy.h"
 #include "byFolderStrategy.h"
 #include "data.h"
-#include "tableBridge.h"
-#include "barBridge.h"
-#include "pieBridge.h"
 #include "observer.h"
 namespace Ui {
 class MainWindow;

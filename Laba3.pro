@@ -16,28 +16,29 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    barBridge.cpp \
+    barChart.cpp \
     byFileTypeStrategy.cpp \
     byFolderStrategy.cpp \
     fileBrowserDataModel.cpp \
     main.cpp \
     mainwindow.cpp \
     observer.cpp \
-    pieBridge.cpp \
-    tableBridge.cpp
+    pieChart.cpp \
+    table.cpp
 
 HEADERS += \
-    abstractBridge.h \
     abstractStrategy.h \
-    barBridge.h \
+    adapter.h \
+    algorytmChart.h \
+    barChart.h \
     byFileTypeStrategy.h \
     byFolderStrategy.h \
     data.h \
     fileBrowserDataModel.h \
     mainwindow.h \
     observer.h \
-    pieBridge.h \
-    tableBridge.h
+    pieChart.h \
+    table.h
 
 FORMS += \
     mainwindow.ui

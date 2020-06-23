@@ -3,8 +3,8 @@
 Observer::Observer()
 {
     massivBridge.resize(3);
-    massivBridge[0] = new BarBridge();
-    massivBridge[1] = new PieBridge();
+    massivBridge[0] = new BarChart();
+    massivBridge[1] = new PieChart();
     massivBridge[2] = new TableBridge();
 }
 
@@ -20,6 +20,7 @@ Observer::~Observer()
 {
     for (int i = 0; i < massivBridge.size(); i++)
     {
-        delete massivBridge[i];}
-
+        delete massivBridge[i];
     }
+
+}

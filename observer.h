@@ -1,10 +1,10 @@
 #ifndef OBSERVER_H
 #define OBSERVER_H
-#include "abstractBridge.h"
+#include "adapter.h"
 #include "data.h"
-#include "tableBridge.h"
-#include "barBridge.h"
-#include "pieBridge.h"
+#include "table.h"
+#include "barChart.h"
+#include "pieChart.h"
 #include <QVector>
 
 class Observer
@@ -15,7 +15,7 @@ public:
     ~Observer();
 
 private:
-    QVector<AbstractBridge*>  massivBridge;
+    QVector<Adapter*>  massivBridge;
 };
 
 #endif // OBSERVER_H
