@@ -7,10 +7,11 @@ class ByFolderStrategy : public AbstractStrategy
 {
 public:
     ByFolderStrategy() {};
-    QList<DataFile> Explore (const QString &);
+    QList<DataFile> explore (const QString &);
 
 private:
-    quint64 FolderSize(const QString &);
+    quint64 folderSize(const QString &); // функция вычисления размера папки
+    // на вход подаётся QString - путь к папке, на выходе quint64 - размер папки в байтах
 };
 
 #endif // BYFOLDERSTRATEGY_H

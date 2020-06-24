@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     dirModel->setRootPath(path);
     ui->folderTreeView->setModel(dirModel);
     ui->folderTreeView->expandAll();
-    pr = observer.UpdateData(data, indexModel = 2);
+    pr = observer.updateData(data, indexModel = 2);
     if (pr != nullptr)
         ui->splitter->addWidget(pr);
 
@@ -25,11 +25,11 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
 void MainWindow::infoShow(bool changeData, int index = 0) {
     if (changeData) {
-        data = groupingStrategy->Explore(path);
-        observer.UpdateData(data, indexModel);
+        data = groupingStrategy->explore(path);
+        observer.updateData(data, indexModel);
     } else {
         indexModel = index;
-        ui->splitter->replaceWidget(1, observer.UpdateData(data, index));
+        ui->splitter->replaceWidget(1, observer.updateData(data, index));
     }
 }
 

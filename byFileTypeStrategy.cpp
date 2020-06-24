@@ -4,13 +4,14 @@
 #include <QString>
 #include <QFile>
 #include <QDir>
-
-void ByFileTypeStrategy::FolderSize(const QString &path, QHash<QString, quint64> &hash) {
+// функция вычисления размера вложенной папки
+// на вход подаётся QString - путь к папке, ссылка на QHash<QString, quint64> - объект, содержащий информацию о размере, занимаемом каждым типом в папке (QString - тип данных, quint64 - размер в байтах)
+void ByFileTypeStrategy::folderSize(const QString &path, QHash<QString, quint64> &hash) {
     QDir dir(path);
 
     foreach (QFileInfo folder, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System | QDir::NoSymLinks))
     {
-        FolderSize(folder.path() + '/' + folder.fileName(), hash);
+        folderSize(folder.path() + '/' + folder.fileName(), hash);
     }
 
     foreach (QFileInfo file, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System))
@@ -26,14 +27,12 @@ void ByFileTypeStrategy::FolderSize(const QString &path, QHash<QString, quint64>
     }
 }
 
-QList<DataFile> ByFileTypeStrategy::Explore(const QString &path) {
+QList<DataFile> ByFileTypeStrategy::explore(const QString &path) {
     QFileInfo pathInfo(path);
     QTextStream out(stdout);
-    QList<DataFile> result; // список данных о размере, занимаемом каждым типом в папке
-
+    QList<DataFile> result;
     if (pathInfo.exists() == false) {// проверка объекта на существование
         out << "Object does not exist.\n" << flush;
-        return QList<DataFile>();
     }
 
     if (QFileInfo(path + '/').isDir()) {// проверка на неполноту пути
@@ -43,7 +42,6 @@ QList<DataFile> ByFileTypeStrategy::Explore(const QString &path) {
     if (pathInfo.isDir() && !pathInfo.isSymLink()) {// проверка на то, что на входе была подана папка
         if (pathInfo.dir().isEmpty()) {
             out << "Folder is empty.\n" << flush;
-            return QList<DataFile>();
         }
 
         QDir dir(pathInfo.absoluteFilePath());
@@ -51,7 +49,7 @@ QList<DataFile> ByFileTypeStrategy::Explore(const QString &path) {
 
         foreach (QFileInfo folder, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System | QDir::NoSymLinks))
         {
-            FolderSize(folder.path() + '/' + folder.fileName(), hash); // проводятся вычисления с папкой
+            folderSize(folder.path() + '/' + folder.fileName(), hash); // проводятся вычисления с папкой
         }
         foreach (QFileInfo file, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System))
         {
@@ -98,7 +96,7 @@ QList<DataFile> ByFileTypeStrategy::Explore(const QString &path) {
             fileSize = fileOpen.size();
             fileOpen.close();
         }
-        result.append(DataFile(pathInfo.suffix(), fileSize, 100));
+         result.append(DataFile(pathInfo.suffix(), fileSize, 100));
     }
     return result;
 }

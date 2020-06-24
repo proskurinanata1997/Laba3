@@ -8,10 +8,10 @@ class ByFileTypeStrategy : public AbstractStrategy
 {
 public:
     ByFileTypeStrategy() {};
-    QList<DataFile> Explore (const QString &);
+    QList<DataFile> explore (const QString &);
 
 private:
-    void FolderSize(const QString &, QHash<QString, quint64> &);
-    QString FileType(const QFileInfo &);
+    void folderSize(const QString &, QHash<QString, quint64> &); // функция вычисления размера вложенной папки
+    // на вход подаётся QString - путь к папке, ссылка на QHash<QString, quint64> - объект, содержащий информацию о размере, занимаемом каждым типом в папке (QString - тип данных, quint64 - размер в байтах)
 };
 #endif // BYFILETYPESTRATEGY_H

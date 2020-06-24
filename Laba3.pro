@@ -24,21 +24,21 @@ SOURCES += \
     mainwindow.cpp \
     observer.cpp \
     pieChart.cpp \
-    table.cpp
+    tableAdapter.cpp
 
 HEADERS += \
     abstractStrategy.h \
     adapter.h \
-    algorytmChart.h \
     barChart.h \
     byFileTypeStrategy.h \
     byFolderStrategy.h \
+    chartAdapter.h \
     data.h \
     fileBrowserDataModel.h \
     mainwindow.h \
     observer.h \
     pieChart.h \
-    table.h
+    tableAdapter.h
 
 FORMS += \
     mainwindow.ui

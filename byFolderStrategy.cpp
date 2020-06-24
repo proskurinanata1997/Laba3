@@ -5,13 +5,13 @@
 #include <QFile>
 #include <QDir>
 
-quint64 ByFolderStrategy::FolderSize(const QString &path) {
+quint64 ByFolderStrategy::folderSize(const QString &path) {
     QDir dir(path); // текущая директория
     quint64 size = QFileInfo(path + "/.").size();
 
     foreach (QFileInfo folder, dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System | QDir::NoSymLinks))
     {
-        size += FolderSize(folder.path() + '/' + folder.fileName());
+        size += folderSize(folder.path() + '/' + folder.fileName());
     }
     foreach (QFileInfo file, dir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System))
     {
@@ -28,7 +28,7 @@ quint64 ByFolderStrategy::FolderSize(const QString &path) {
     return size;
 }
 
-QList<DataFile> ByFolderStrategy::Explore(const QString &path) {
+QList<DataFile> ByFolderStrategy::explore(const QString &path) {
     QFileInfo pathInfo(path);
     QTextStream out(stdout);
     QList<DataFile> result; // список данных о размере каждого элемента папки
@@ -59,7 +59,7 @@ QList<DataFile> ByFolderStrategy::Explore(const QString &path) {
                     continue; // пропускаем ярлыки
                 }
             } else {
-                tempSize = FolderSize(folder.path() + '/' + folder.fileName());
+                tempSize = folderSize(folder.path() + '/' + folder.fileName());
             }
             sizes.append(tempSize);
             totalSize += tempSize;

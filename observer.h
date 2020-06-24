@@ -2,7 +2,7 @@
 #define OBSERVER_H
 #include "adapter.h"
 #include "data.h"
-#include "table.h"
+#include "tableAdapter.h"
 #include "barChart.h"
 #include "pieChart.h"
 #include <QVector>
@@ -11,7 +11,7 @@ class Observer
 {
 public:
     Observer();
-    QWidget*  UpdateData(QList<DataFile>&, unsigned int);
+    QWidget*  updateData(QList<DataFile>&, unsigned int);
     ~Observer();
 
 private:
