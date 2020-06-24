@@ -3,13 +3,13 @@
 #include <QtCharts/QPieSeries>
 #include <QtCharts/QPieSlice>
 #include <QtCharts/QChart>
-#include "algorytmChart.h"
-class PieChart: public AlgorytmChart
+#include "chartAdapter.h"
+class PieChart: public ChartAdapter
 {
 public:
     PieChart();
 private:
-    QtCharts::QAbstractSeries* drowChart (const QList<DataFile>&);
+    QtCharts::QAbstractSeries* putDataInSeries (const QList<DataFile>&);
 };
 
 #endif // PIECHART_H

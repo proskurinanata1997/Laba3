@@ -5,7 +5,7 @@ BarChart::BarChart(){
     axisY->setRange(0,100);
     model->addAxis(axisY, Qt::AlignLeft);
 }
-QtCharts::QAbstractSeries* BarChart::drowChart(const QList<DataFile> &data){
+QtCharts::QAbstractSeries* BarChart::putDataInSeries(const QList<DataFile> &data){
 
 
     QtCharts::QBarSeries *series = new QtCharts::QBarSeries(); // серия элементов диаграммы

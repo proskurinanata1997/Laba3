@@ -3,13 +3,13 @@
 #include <QtCharts/QChartView>
 #include <QtCharts/QValueAxis>
 #include <QtCharts/QChart>
-#include "algorytmChart.h"
-class BarChart : public AlgorytmChart
+#include "chartAdapter.h"
+class BarChart : public ChartAdapter
 {
 public:
     BarChart();
 private:
-    QtCharts::QAbstractSeries* drowChart (const QList<DataFile>&);
+    QtCharts::QAbstractSeries* putDataInSeries (const QList<DataFile>&);
     QtCharts::QValueAxis *axisY;
 };
 #endif // BARCHART_H
