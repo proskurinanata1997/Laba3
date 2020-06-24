@@ -1,6 +1,6 @@
-#include "table.h"
+#include "tableAdapter.h"
 
-TableBridge::TableBridge(QObject *p): Adapter(p) {
+TableAdapter::TableAdapter(QObject *p): Adapter(p) {
     QTableView *view_ptr = new QTableView();
     model = new FileBrowserDataModel();
     view_ptr->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -8,12 +8,12 @@ TableBridge::TableBridge(QObject *p): Adapter(p) {
     view->setModel(model);
 };
 
-TableBridge::~TableBridge() {
+TableAdapter::~TableAdapter() {
     delete view; // удаление виджета
     delete model; // удаление модели
 }
 
-QWidget* TableBridge::UpdateData(const QList<DataFile> &data) {
+QWidget* TableAdapter::updateData(const QList<DataFile> &data) {
     model->setNewData(data);
     return view;
 }

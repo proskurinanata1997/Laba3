@@ -8,25 +8,25 @@
 #include <QtCharts/QPieSeries>
 #include <QtCharts/QPieSlice>
 #include "adapter.h"
-class AlgorytmChart : public Adapter
+class ChartAdapter : public Adapter
 {
 public:
-    AlgorytmChart(){
+    ChartAdapter(){
         view = new QtCharts::QChartView();
         model = new QtCharts::QChart();
         view->setRenderHint(QPainter::Antialiasing);
         view->setChart(model);
-        drowLegend();
+        showLegend();
     }
-    QWidget* UpdateData(const QList<DataFile>& data){
+    QWidget* updateData(const QList<DataFile>& data){
         model->removeAllSeries();
-        model->addSeries(drowChart(data));
+        model->addSeries(putDataInSeries(data));
         model->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
         return view;
     }
 protected:
-    virtual QtCharts::QAbstractSeries* drowChart(const QList<DataFile> &data)=0;
-    void drowLegend(){
+    virtual QtCharts::QAbstractSeries* putDataInSeries(const QList<DataFile> &data)=0;
+    void showLegend(){
         model->legend()->setVisible(true);
         model->legend()->setAlignment(Qt::AlignRight);
     }

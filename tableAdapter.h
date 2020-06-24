@@ -6,12 +6,12 @@
 #include "fileBrowserDataModel.h"
 #include "adapter.h"
 
-class TableBridge : public Adapter
+class TableAdapter : public Adapter
 {
 public:
-    TableBridge(QObject *p = nullptr);
-    QWidget* UpdateData(const QList<DataFile>&);
-    ~TableBridge();
+    TableAdapter(QObject *p = nullptr);
+    QWidget* updateData(const QList<DataFile>&);
+    ~TableAdapter();
 private:
     QAbstractItemView *view; // указатель на виджет, отображающий информацию в виде таблицы
     FileBrowserDataModel *model; // указатель на модель, из которой строится таблица
